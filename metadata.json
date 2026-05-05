@@ -1,0 +1,6 @@
+{
+  "name": "Aether 灵境引擎",
+  "description": "一个用于编排大语言模型、自定义技能和复杂工作流的高性能智能体操作系统。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

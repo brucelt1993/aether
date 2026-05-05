@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    match /models/{modelId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow write: if isSignedIn() && (resource == null ? request.resource.data.ownerId == request.auth.uid : resource.data.ownerId == request.auth.uid);
+    }
+
+    match /skills/{skillId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow write: if isSignedIn() && (resource == null ? request.resource.data.ownerId == request.auth.uid : resource.data.ownerId == request.auth.uid);
+    }
+
+    match /agents/{agentId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow write: if isSignedIn() && (resource == null ? request.resource.data.ownerId == request.auth.uid : resource.data.ownerId == request.auth.uid);
+    }
+
+    match /messages/{messageId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow write: if isSignedIn() && (resource == null ? request.resource.data.ownerId == request.auth.uid : resource.data.ownerId == request.auth.uid);
+    }
+
+    match /workflows/{workflowId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow write: if isSignedIn() && (resource == null ? request.resource.data.ownerId == request.auth.uid : resource.data.ownerId == request.auth.uid);
+    }
+  }
+}

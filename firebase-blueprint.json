@@ -1,0 +1,112 @@
+{
+  "entities": {
+    "Model": {
+      "title": "LLM Model Configuration",
+      "description": "Configuration for an LLM provider including API keys and parameters.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "provider": { "type": "string", "enum": ["Google", "OpenAI", "Anthropic", "Custom"] },
+        "apiKey": { "type": "string" },
+        "baseUrl": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "temperature": { "type": "number" },
+            "maxTokens": { "type": "number" },
+            "topP": { "type": "number" }
+          }
+        },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "provider", "ownerId"]
+    },
+    "Skill": {
+      "title": "Agent Skill",
+      "description": "A predefined behavior or system prompt for an agent.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "systemPrompt": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "systemPrompt", "ownerId"]
+    },
+    "Agent": {
+      "title": "Custom Agent",
+      "description": "A combination of a model and a skill that a user can interact with.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "modelId": { "type": "string" },
+        "skillId": { "type": "string" },
+        "config": {
+          "type": "object",
+          "properties": {
+            "temperature": { "type": "number" },
+            "topP": { "type": "number" }
+          }
+        },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "modelId", "ownerId"]
+    },
+    "Message": {
+      "title": "Chat Message",
+      "description": "A single interaction in a chat session.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "assistant", "system"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["sessionId", "role", "content", "ownerId"]
+    },
+    "Workflow": {
+      "title": "Agent Workflow",
+      "description": "A visual sequence of processing steps involving multiple skills.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "nodes": { "type": "array" },
+        "edges": { "type": "array" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "ownerId"]
+    }
+  },
+  "firestore": {
+    "/models/{modelId}": {
+      "schema": "Model",
+      "description": "User-defined LLM models"
+    },
+    "/skills/{skillId}": {
+      "schema": "Skill",
+      "description": "User-defined agent skills"
+    },
+    "/agents/{agentId}": {
+      "schema": "Agent",
+      "description": "User-configured agents"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Chat message history"
+    },
+    "/workflows/{workflowId}": {
+      "schema": "Workflow",
+      "description": "User-defined workflows"
+    }
+  }
+}
